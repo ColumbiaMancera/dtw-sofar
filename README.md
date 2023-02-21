@@ -1,6 +1,7 @@
 # dtw-sofar
 
 [![License](https://img.shields.io/github/license/egeozguroglu/dtw-sofar.svg)](https://github.com/egeozguroglu/dtw-sofar)
+![GitHub issues](https://img.shields.io/github/issues/egeozguroglu/dtw-sofar)
 
 
 # Overview
