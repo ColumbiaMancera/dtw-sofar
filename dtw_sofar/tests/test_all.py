@@ -15,6 +15,20 @@ def test_get_initial_matrices_backpointers():
     backpointers_expected = np.zeros((frame_features.shape[0], text_features.shape[0]))
     assert np.array_equal(backpointers, backpointers_expected)
 
+def test_get_initial_matrices_costmatrix():
+    frame_features = np.random.rand(20)
+    text_features = np.random.rand(10)
+    cost_matrix, backpointers = get_initial_matrices(frame_features, text_features)
+    n = frame_features.shape[0] 
+    m = text_features.shape[0] 
+
+    cost_matrix_expected = np.zeros((n+1, m+1))
+    for i in range(1, n+1): 
+        cost_matrix_expected[i,0]  = np.inf
+    for i in range(1,m+1):
+        cost_matrix_expected[0, i]  = np.inf
+
+    assert np.array_equal(cost_matrix_expected, cost_matrix)
 
 def test_dtw():
     assert True
