@@ -14,14 +14,14 @@ install:  ## install library
 # LINTS #
 #########
 lint:  ## run static analysis with flake8
-	python -m black --check dtw-sofar setup.py
-	python -m flake8 dtw-sofar setup.py
+	python -m black --check dtw_sofar setup.py
+	python -m flake8 dtw_sofar setup.py
 
 # Alias
 lints: lint
 
 format:  ## run autoformatting with black
-	python -m black dtw-sofar/ setup.py
+	python -m black dtw_sofar/ setup.py
 
 # alias
 fix: format
@@ -33,16 +33,16 @@ check:  ## check assets for packaging
 checks: check
 
 annotate:  ## run type checking
-	python -m mypy ./dtw-sofar
+	python -m mypy ./dtw_sofar
 
 #########
 # TESTS #
 #########
 test: ## clean and run unit tests
-	python -m pytest -v dtw-sofar/tests
+	python -m pytest -v dtw_sofar/tests
 
 coverage:  ## clean and run unit tests with coverage
-	python -m pytest -v dtw-sofar/tests --cov=dtw-sofar --cov-branch --cov-fail-under=75 --cov-report term-missing
+	python -m pytest -v dtw_sofar/tests --cov=dtw_sofar --cov-branch --cov-fail-under=75 --cov-report term-missing
 
 # Alias
 tests: test
