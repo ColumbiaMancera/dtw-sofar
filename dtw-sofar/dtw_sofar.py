@@ -86,7 +86,6 @@ def dtw_onthefly_classification(image_features, text_features):
   return final_path, cost_matrix[1:, 1:], onthefly_predictions, onthefly_path
 
 
-
 '''
 dynamic time warping that examines the series seen "so far"
 '''
@@ -120,14 +119,6 @@ def dtw_sofar(current_image_features, text_features, current_frame_idx, cost_mat
   current_predicted_idx = j 
 
   i = current_frame_idx
-  # TODO: think about whether you should require j to = m (when i == n-1)? regular DTW traces back from [n-1, m-1].
-  # this ensures for the last video frame is aligned with last text instruction (however, only for last step)
-  # how would final predictions be different without setting this constraint?
-  # (always tracing back from cost[i, argmin[dtw_matrix[i]]] to cost[0,0], including last iteration)
-  # if i == cost_matrix_sofar.shape[0]-2:
-    # cost_matrix_sofar.shape[0] is n+1, so n-1 is cost_matrix_sofar.shape[0]-2
-    # j = m - 1
-
   # get alignment: trace back from dtw_matrix[i, argmin[dtw_matrix[i]]] to dtw_matrix[0,0]:
   alignment_path = [(i,j)] 
   while i > 0 or j > 0:
