@@ -3,8 +3,6 @@ import numpy as np
 """
 regular dynamic time warping algorithm
 """
-
-
 def dtw(x, y, cost_metric):
     n = x.shape[0]  # points in series x
     m = y.shape[0]  # points in series y
@@ -29,9 +27,9 @@ def dtw(x, y, cost_metric):
             ]
             backptr_idx = np.argmin(temporal_neighbors)
             temporal_penalty = temporal_neighbors[backptr_idx]
-
             dtw_matrix[i + 1, j + 1] = cost_metric(x[i], y[j]) + temporal_penalty
             backpointers[i, j] = backptr_idx
+            print(cost_metric(x[i], y[j]))
 
     # get alignment: trace back from dtw_matrix[n,m] to dtw_matrix[0,0]:
     i = n - 1
@@ -50,7 +48,7 @@ def dtw(x, y, cost_metric):
         alignment_path.append((i, j))
 
     # return alignment path and cost_matrix:
-    return alignment_path[::-1], dtw_matrix[1:, 1:]
+    return alignment_path[::-1], dtw_matrix
 
 
 # prepare initial cost_matrix and backpointers matrix
