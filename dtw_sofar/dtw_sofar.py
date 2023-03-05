@@ -3,6 +3,8 @@ import numpy as np
 """
 regular dynamic time warping algorithm
 """
+
+
 def dtw(x, y, cost_metric):
     n = x.shape[0]  # points in series x
     m = y.shape[0]  # points in series y
@@ -69,9 +71,7 @@ def get_initial_matrices(frame_features, text_features):
 
 
 def dtw_cost(features_a, features_b):
-    cos_similarity = np.dot(features_a, features_b) / (
-        np.linalg.norm(features_a) * np.linalg.norm(features_b)
-    )
+    cos_similarity = np.dot(features_a, features_b) / (np.linalg.norm(features_a) * np.linalg.norm(features_b))
     return 1 - cos_similarity
 
 
@@ -129,16 +129,11 @@ def dtw_sofar(
         # cost based on matching_function:
         if matching_model:
             cost_matrix_sofar[i + 1, j + 1] = (
-                dtw_cost_fn(
-                    current_image_features, text_features[j], matching_model, device
-                )
-                + temporal_penalty
+                dtw_cost_fn(current_image_features, text_features[j], matching_model, device) + temporal_penalty
             )
             continue
         # cost based on cosine similarity:
-        cost_matrix_sofar[i + 1, j + 1] = (
-            dtw_cost_fn(current_image_features, text_features[j]) + temporal_penalty
-        )
+        cost_matrix_sofar[i + 1, j + 1] = dtw_cost_fn(current_image_features, text_features[j]) + temporal_penalty
 
     #####
     # Trace back to get alignment path (operating in backpointers matrix coordinate frame (n x m)):
