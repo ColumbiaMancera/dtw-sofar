@@ -138,7 +138,8 @@ def dtw_sofar(
     #####
     # Trace back to get alignment path (operating in backpointers matrix coordinate frame (n x m)):
     #####
-    # get argmin of the current (i+1 st) row: best matching text feature's idx for the current video frame (text feature that minimizes alignment cost)
+    # get argmin of the current (i+1 st) row: best matching text feature's idx
+    # for the current video frame (text feature that minimizes alignment cost)
     cost_matrix = cost_matrix_sofar[1:, 1:]  # strip off infs
     j = np.argmin(cost_matrix[i])
     current_predicted_idx = j
