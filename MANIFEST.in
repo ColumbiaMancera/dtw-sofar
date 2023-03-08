@@ -1,7 +1,8 @@
 graft dtw-sofar
 
 include LICENSE
-include README.md
+include *.md
+recursive-include dtw_sofar *.pickle
 
 include .bumpversion.cfg
 include pyproject.toml
