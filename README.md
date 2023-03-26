@@ -26,14 +26,15 @@ $ pip install dtw-sofar
 Below is a sample use-case for quick start:
     
 ```python
-from dtw_sofar import dtw_onthefly_classification
+import importlib
 import numpy as np
+dtwsofar = importlib.import_module('dtw-sofar.dtw_sofar')
 
 video_features = np.load('CLIP_video_embeddings_path')
 text_features = np.load('CLIP_text_embeddings_path')
 
 # iterates over each RGB frame's CLIP embeddings and classifies matching text embeddings on-the-fly:
-final_path, dtw_matrix, onthefly_predictions, onthefly_path = dtw_onthefly_classification(video_features, text_features)
+final_path, dtw_matrix, onthefly_predictions, onthefly_path = dtwsofar.dtw_onthefly_classification(video_features, text_features)
 ```
 This use case demonstrates performing dynamic time warping so-far on image and natural language embeddings from Open AI's CLIP Model, so as to align them. See the overview for relevance. 
 
@@ -43,5 +44,5 @@ This library can also be used for simpler time-series:
 time_series_a = np.random.rand(100, 1)
 time_series_b = np.random.rand(35,1)
 
-final_path, dtw_matrix, onthefly_alignment, onthefly_path = dtw_onthefly_classification(time_series_a, time_series_b)
+final_path, dtw_matrix, onthefly_alignment, onthefly_path = dtwsofar.dtw_onthefly_classification(time_series_a, time_series_b)
 ```
