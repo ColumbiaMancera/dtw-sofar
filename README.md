@@ -8,16 +8,18 @@
 
 This library implements the "Dynamic Time Warping Algorithm" for multimodal research in a way it can warp the time series received "so far." In other words, it modifies the dynamic time warping algorithm to be compatible with 'iterative stimuli' (when future points in the time series are received one by one). 
 
-One motivating application is aligning natural language annotations and video frames for research on Visual Language Models (e.g. CLIP), when the latter's embeddings are received frame by frame (e.g. we're making observations and don't have access to future frames). With "dtw-sofar," we can predict optimally matching annotations to new video frames on the fly - by relying on temporal information available "so far."
+One motivating application is aligning natural language annotations and video frames for research on Visual Language Models (e.g. [CLIP by OpenAI](https://openai.com/blog/clip/)), when the latter's embeddings are received frame by frame (e.g. we're making observations and don't have access to future frames). With "dtw-sofar," we can predict optimally matching annotations to new video frames on the fly - by relying on temporal information available "so far."
 
 ## Development and Contributions
-For development details and contribution instructions, please refer to ...
+For development details and contribution instructions, please refer to the [contribution guidelines](https://github.com/egeozguroglu/dtw-sofar/blob/main/CONTRIBUTING.md).
+
 
 # Installation: 
 To install this library, you may execute `pip install dtw-sofar`
 
 # Quick Start Example:
-Below is a use case to perform dynamic time warping so-far on image and natural language embeddings from Open AI's CLIP Model, so as to align them:
+Below is a sample use-case for quick start:
+    
     from dtw_sofar import dtw_cost, get_initial_matrices, dtw_sofar
     import numpy as np
 
@@ -30,3 +32,5 @@ Below is a use case to perform dynamic time warping so-far on image and natural 
         path_sofar, cost_matrix, backpointers, current_predicted_idx = dtw_sofar.dtw_sofar(
             frame_features[i], text_features, i, cost_matrix, backpointers, dtw_cost
         )
+        
+This use case demonstrates performing dynamic time warping so-far on image and natural language embeddings from Open AI's CLIP Model, so as to align them. See overview for relevance. 
