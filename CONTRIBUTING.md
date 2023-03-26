@@ -21,15 +21,17 @@ You may create a new branch for your contribution as follows:
 
     git checkout -b new-feature
 
-####  Testing and Linting:
-To test your changes, please execute `make test` (or `make coverage` to test with coverage).
-For static analysis, you may use `make lint`. Further details on these commands are provided in the Further Development Details section.
-
 ####  Commit and push your changes:
 
-After making your changes, commit them to your new-feature branch. Then, push your forked feature branch's commits::
+After making your changes, commit them to your new-feature branch. Then, push your forked feature branch's commits:
 
     git push origin new-feature
+
+####  Testing and Linting:
+Before opening a  PR, please run testing and perform static analysis. Make sure to add new tests for any new features.
+
+To test your changes, please execute `make test` (or `make coverage` to test with coverage).
+For static analysis, you may use `make lint`. Further details on these commands are provided in the Further Development Details section.
 
 ####  Create a Pull Request:
 When you're ready to ask for a code review, file a pull request:
@@ -51,3 +53,5 @@ This library uses a `Makefile` as a command registry, with the following command
 - `make test`: run automated tests with `pytest`
 - `make coverage`: run automated tests with `pytest` and collect coverage information
 - `make dist`: package library for distribution
+
+Note: These contribution instructions were inspired by those of pandas.
