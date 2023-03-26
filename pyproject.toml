@@ -73,6 +73,7 @@ combine_as_imports = true
 
 [tool.mypy]
 python_version = '3.10'
+ignore_missing_import = true
 # show_error_codes = true
 # follow_imports = 'silent'
 # strict_optional = true
