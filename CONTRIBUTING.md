@@ -1,37 +1,53 @@
 # Contributing to dtw-sofar
 
 ## Prerequisites:
-Before starting your contribution, please make sure to have Python instaled. This project requires Python 3.7 and above.
+This project requires Python 3.7 and above. Before starting your contribution, please make sure to have Python installed. 
 
 ## Development Dependencies:
 To install development dependencies, execute `make develop`. This will install and build this library and its dependencies using `pip`.
 
 ## Contribution Instructions:
-### Fork and Clone:
+#### Fork and Clone:
 You will need your own fork to work on the code. Go to the `dtw-sofar project
-page <https://github.com/egeozguroglu/dtw-sofar>` and hit the ``Fork`` button. You will
-want to clone your fork to your machine::
+page <https://github.com/egeozguroglu/dtw-sofar>` and hit the ``Fork`` button. You will want to clone your fork on your local machine:
 
     git clone https://github.com/your-user-name/dtw-sofar.git dtw-sofar-yourname
     cd dtw-sofar-yourname
     git remote add upstream https://github.com/egeozguroglu/dtw-sofar.git
     git fetch upstream
 
-### Branch
+#### Branch
 You may create a new branch for your contribution as follows:
 
     git checkout -b new-feature
 
-## Commit and push your changes:
+####  Testing and Linting:
+To test your changes, please execute `make test` (or `make coverage` to test with coverage).
+For static analysis, you may use `make lint`. Further details on these commands are provided in the Further Development Details section.
+
+####  Commit and push your changes:
 
 After making your changes, commit them to your new-feature branch. Then, push your forked feature branch's commits::
 
     git push origin new-feature
 
-## Create a Pull Request:
+####  Create a Pull Request:
 When you're ready to ask for a code review, file a pull request:
     - Navigate to your repository on GitHub -- https://github.com/your-user-name/dtw-sofar
     - Click on ``Branches``
 #. Click on the ``Compare`` button for your feature branch
 #. Select the ``base`` and ``compare`` branches, if necessary. This will be ``main`` and
    ``new-feature``, respectively.
+
+##  Further Development Details:
+This library uses a `Makefile` as a command registry, with the following commands. 
+
+- `make`: list available commands
+- `make develop`: install and build this library and its dependencies using `pip`
+- `make build`: build the library using `setuptools`
+- `make lint`: perform static analysis of this library with `flake8` and `black`
+- `make format`: autoformat this library using `black`
+- `make annotate`: run type checking using `mypy`
+- `make test`: run automated tests with `pytest`
+- `make coverage`: run automated tests with `pytest` and collect coverage information
+- `make dist`: package library for distribution

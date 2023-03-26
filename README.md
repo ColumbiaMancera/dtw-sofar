@@ -10,18 +10,8 @@ This library implements the "Dynamic Time Warping Algorithm" for multimodal rese
 
 One motivating application is aligning natural language annotations and video frames for research on Visual Language Models (e.g. CLIP), when the latter's embeddings are received frame by frame (e.g. we're making observations and don't have access to future frames). With "dtw-sofar," we can predict optimally matching annotations to new video frames on the fly - by relying on temporal information available "so far."
 
-# Development Details
-This library uses a `Makefile` as a command registry, with the following commands. 
-
-- `make`: list available commands
-- `make develop`: install and build this library and its dependencies using `pip`
-- `make build`: build the library using `setuptools`
-- `make lint`: perform static analysis of this library with `flake8` and `black`
-- `make format`: autoformat this library using `black`
-- `make annotate`: run type checking using `mypy`
-- `make test`: run automated tests with `pytest`
-- `make coverage`: run automated tests with `pytest` and collect coverage information
-- `make dist`: package library for distribution
+## Development and Contributions
+For development details and contribution instructions, please refer to ...
 
 # Installation: 
 To install this library, you may execute `pip install dtw-sofar`
