@@ -11,8 +11,7 @@ def dtw(x, y, cost_metric):
     :type kind: np.ndarray
     :param cost_metric: A function that takes two points from x and y and returns the cost of aligning them.
     :type kind: function
-    :return: The alignment path, i.e. a list of tuples (i, j) where i is the index of the point in x and j is the index of the point in y.
-    :rtype: list[tuple[int, int]]
+    :return: The alignment path.
     :return: The dynamic time warping cost matrix.
     :rtype: np.ndarray
     """
@@ -112,13 +111,13 @@ def dtw_onthefly_classification(image_features, text_features):
     :type kind: np.ndarray
     :param text_features: embeddings of annotation text.
     :type kind: np.ndarray
-    :return: final_path: The final alignment path, i.e. a list of tuples (i, j) where i is the index of the point in x and j is the index of the point in y.
+    :return: final_path: The final alignment path.
     :rtype: list[tuple[int, int]]
     :return: The dynamic time warping cost matrix, populated.
     :rtype: np.ndarray
     :return: onthefly_predictions: iterative predictions of the text feature index that best matches the frames so far.
     :rtype: list[int]
-    :return: onthefly_path: iterative alignment paths, i.e. a list of tuples (i, j) where i is the index of the point in x and j is the index of the point in y.
+    :return: onthefly_path: iterative alignment paths.
     :rtype: list[list[tuple[int, int]]]
     """
     cost_matrix, backpointers = get_initial_matrices(image_features, text_features)
@@ -170,7 +169,7 @@ def dtw_sofar(
     :type kind: torch.nn.Module, None
     :param device Optional: The device to use for dynamic time warping.
     :type kind: torch.device, None
-    :return: path_sofar: The alignment path "so far", i.e. a list of tuples (i, j) where i is the index of the point in x and j is the index of the point in y.
+    :return: path_sofar: The alignment path "so far".
     :rtype: list[tuple[int, int]]
     :return: The dynamic time warping cost matrix, populated so far.
     :rtype: np.ndarray
