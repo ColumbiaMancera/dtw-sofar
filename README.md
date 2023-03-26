@@ -22,23 +22,27 @@ $ pip install numpy
 $ pip install dtw-sofar
 ```
 
-
-# Quick Start Example:
+# Quick Start Examples:
 Below is a sample use-case for quick start:
     
 ```python
-from dtw_sofar import dtw_cost, get_initial_matrices, dtw_sofar
+import importlib
 import numpy as np
+dtwsofar = importlib.import_module('dtw-sofar.dtw_sofar')
 
 video_features = np.load('CLIP_video_embeddings_path')
 text_features = np.load('CLIP_text_embeddings_path')
-cost_matrix, backpointers = get_initial_matrices(video_features, text_features) 
 
-# iterate over each RGB frame's CLIP embeddings and align stimuli received "so far":
-for i in range(len(video_features)):
-    path_sofar, cost_matrix, backpointers, current_predicted_idx = dtw_sofar.dtw_sofar(
-        frame_features[i], text_features, i, cost_matrix, backpointers, dtw_cost
-    )
+# iterates over each RGB frame's CLIP embeddings and classifies matching text embeddings on-the-fly:
+final_path, dtw_matrix, onthefly_predictions, onthefly_path = dtwsofar.dtw_onthefly_classification(video_features, text_features)
 ```
+This use case demonstrates performing dynamic time warping so-far on image and natural language embeddings from Open AI's CLIP Model, so as to align them. See the overview for relevance. 
 
-This use case demonstrates performing dynamic time warping so-far on image and natural language embeddings from Open AI's CLIP Model, so as to align them. See overview for relevance. 
+This library can also be used for simpler time-series:
+```python
+# time-series to be aligned with dynamic time warping "so far":
+time_series_a = np.random.rand(100, 1)
+time_series_b = np.random.rand(35,1)
+
+final_path, dtw_matrix, onthefly_alignment, onthefly_path = dtwsofar.dtw_onthefly_classification(time_series_a, time_series_b)
+```
