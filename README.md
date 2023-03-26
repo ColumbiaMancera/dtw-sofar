@@ -1,5 +1,6 @@
 # dtw-sofar
 
+[![PyPI](https://img.shields.io/pypi/v/dtw-sofar)](https://pypi.org/project/dtw-sofar/)
 [![License](https://img.shields.io/github/license/egeozguroglu/dtw-sofar.svg)](https://github.com/egeozguroglu/dtw-sofar)
 ![GitHub issues](https://img.shields.io/github/issues/egeozguroglu/dtw-sofar) [![Build Status](https://github.com/egeozguroglu/dtw-sofar/workflows/Build%20Status/badge.svg?branch=main)](https://github.com/egeozguroglu/dtw-sofar/actions?query=workflow%3A%22Build+Status%22) [![codecov](https://codecov.io/gh/egeozguroglu/dtw-sofar/branch/main/graph/badge.svg)](https://codecov.io/gh/egeozguroglu/dtw-sofar)
 
