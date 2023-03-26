@@ -1,11 +1,21 @@
 import numpy as np
 
-"""
-regular dynamic time warping algorithm
-"""
-
 
 def dtw(x, y, cost_metric):
+    """
+    Align two time series with dynamic time warping and return the resulting path.
+
+    :param x: First time series to be aligned.
+    :type kind: np.ndarray
+    :param y: Second time series to be aligned.
+    :type kind: np.ndarray
+    :param cost_metric: A function that takes two points from x and y and returns the cost of aligning them.
+    :type kind: function
+    :return: The alignment path, i.e. a list of tuples (i, j) where i is the index of the point in x and j is the index of the point in y.
+    :rtype: list[tuple[int, int]]
+    :return: The dynamic time warping cost matrix.
+    :rtype: np.ndarray
+    """
     n = x.shape[0]  # points in series x
     m = y.shape[0]  # points in series y
 
@@ -15,7 +25,6 @@ def dtw(x, y, cost_metric):
         dtw_matrix[i, 0] = np.inf
     for i in range(1, m + 1):
         dtw_matrix[0, i] = np.inf
-    print(dtw_matrix)
 
     # backpointer matrix (n, m):
     backpointers = np.zeros((n, m))
@@ -31,7 +40,6 @@ def dtw(x, y, cost_metric):
             temporal_penalty = temporal_neighbors[backptr_idx]
             dtw_matrix[i + 1, j + 1] = cost_metric(x[i], y[j]) + temporal_penalty
             backpointers[i, j] = backptr_idx
-            print(cost_metric(x[i], y[j]))
 
     # get alignment: trace back from dtw_matrix[n,m] to dtw_matrix[0,0]:
     i = n - 1
@@ -53,8 +61,19 @@ def dtw(x, y, cost_metric):
     return alignment_path[::-1], dtw_matrix
 
 
-# prepare initial cost_matrix and backpointers matrix
 def get_initial_matrices(frame_features, text_features):
+    """
+    Prepares cost matrix and backpointer matrix for dynamic time warping.
+
+    :param frame_features: embeddings of RGB video frames.
+    :type kind: np.ndarray
+    :param text_features: embeddings of annotation text.
+    :type kind: np.ndarray
+    :return: The dynamic time warping cost matrix.
+    :rtype: np.ndarray
+    :return: The dynamic time warping backpointers matrix.
+    :rtype: np.ndarray
+    """
     n = frame_features.shape[0]
     m = text_features.shape[0]
 
@@ -71,11 +90,37 @@ def get_initial_matrices(frame_features, text_features):
 
 
 def dtw_cost(features_a, features_b):
+    """
+    Computes the cosine similarity cost of aligning two features.
+
+    :param features_a: First set of feature(s) for cosine similarity computation.
+    :type kind: np.ndarray
+    :param features_b: Second set of feature(s) for cosine similarity computation.
+    :type kind: np.ndarray
+    :return: Cosine similarity cost.
+    :rtype: float
+    """
     cos_similarity = np.dot(features_a, features_b) / (np.linalg.norm(features_a) * np.linalg.norm(features_b))
     return 1 - cos_similarity
 
 
 def dtw_onthefly_classification(image_features, text_features):
+    """
+    Performs dynamic Time So Far (DTW-SOFAR) based classification between the two provided sets of features.
+
+    :param frame_features: embeddings of RGB video frames.
+    :type kind: np.ndarray
+    :param text_features: embeddings of annotation text.
+    :type kind: np.ndarray
+    :return: final_path: The final alignment path, i.e. a list of tuples (i, j) where i is the index of the point in x and j is the index of the point in y.
+    :rtype: list[tuple[int, int]]
+    :return: The dynamic time warping cost matrix, populated.
+    :rtype: np.ndarray
+    :return: onthefly_predictions: iterative predictions of the text feature index that best matches the frames so far.
+    :rtype: list[int]
+    :return: onthefly_path: iterative alignment paths, i.e. a list of tuples (i, j) where i is the index of the point in x and j is the index of the point in y.
+    :rtype: list[list[tuple[int, int]]]
+    """
     cost_matrix, backpointers = get_initial_matrices(image_features, text_features)
 
     onthefly_predictions = list()  # "on the fly" predictions
@@ -96,11 +141,6 @@ def dtw_onthefly_classification(image_features, text_features):
     return final_path, cost_matrix[1:, 1:], onthefly_predictions, onthefly_path
 
 
-"""
-dynamic time warping that examines the series seen "so far"
-"""
-
-
 def dtw_sofar(
     current_image_features,
     text_features,
@@ -111,6 +151,34 @@ def dtw_sofar(
     matching_model=None,
     device=None,
 ):
+    """
+    Dynamic Time Warping that examines the series seen "so far".
+
+    :param current_image_features: embeddings of RGB video frames received so far.
+    :type kind: np.ndarray
+    :param text_features: embeddings of annotation text.
+    :type kind: np.ndarray
+    :param current_frame_idx: index of the current frame.
+    :type kind: int
+    :param cost_matrix_sofar: The dynamic time warping cost matrix, populated so far.
+    :type kind: np.ndarray
+    :param backpointers: The dynamic time warping backpointers matrix, populated so far.
+    :type kind: np.ndarray
+    :param dtw_cost_fn: The cost function to use for dynamic time warping.
+    :type kind: function
+    :param matching_model Optional: The matching (classification) model to use for dynamic time warping.
+    :type kind: torch.nn.Module, None
+    :param device Optional: The device to use for dynamic time warping.
+    :type kind: torch.device, None
+    :return: path_sofar: The alignment path "so far", i.e. a list of tuples (i, j) where i is the index of the point in x and j is the index of the point in y.
+    :rtype: list[tuple[int, int]]
+    :return: The dynamic time warping cost matrix, populated so far.
+    :rtype: np.ndarray
+    :return: backpointers: The dynamic time warping backpointers matrix, populated so far.
+    :rtype: np.ndarray
+    :return: current_predicted_idx: The current predicted text feature index.
+    :rtype: int
+    """
     m = text_features.shape[0]  # number of text annotations
     i = current_frame_idx
 
