@@ -15,22 +15,30 @@ For development details and contribution instructions, please refer to the [cont
 
 
 # Installation: 
-To install this library, you may execute `pip install dtw-sofar`
+First, install Python 3.7 (or later) and numpy, and then install this repo as a Python package. 
+
+```bash
+$ pip install numpy
+$ pip install dtw-sofar
+```
+
 
 # Quick Start Example:
 Below is a sample use-case for quick start:
     
-    from dtw_sofar import dtw_cost, get_initial_matrices, dtw_sofar
-    import numpy as np
+```python
+from dtw_sofar import dtw_cost, get_initial_matrices, dtw_sofar
+import numpy as np
 
-    video_features = np.load('CLIP_video_embeddings_path')
-    text_features = np.load('CLIP_text_embeddings_path')
-    cost_matrix, backpointers = get_initial_matrices(video_features, text_features) 
+video_features = np.load('CLIP_video_embeddings_path')
+text_features = np.load('CLIP_text_embeddings_path')
+cost_matrix, backpointers = get_initial_matrices(video_features, text_features) 
 
-    # iterate over each RGB frame's CLIP embeddings:
-    for i in range(len(video_features)):
-        path_sofar, cost_matrix, backpointers, current_predicted_idx = dtw_sofar.dtw_sofar(
-            frame_features[i], text_features, i, cost_matrix, backpointers, dtw_cost
-        )
-        
+# iterate over each RGB frame's CLIP embeddings and align stimuli received "so far":
+for i in range(len(video_features)):
+    path_sofar, cost_matrix, backpointers, current_predicted_idx = dtw_sofar.dtw_sofar(
+        frame_features[i], text_features, i, cost_matrix, backpointers, dtw_cost
+    )
+```
+
 This use case demonstrates performing dynamic time warping so-far on image and natural language embeddings from Open AI's CLIP Model, so as to align them. See overview for relevance. 
