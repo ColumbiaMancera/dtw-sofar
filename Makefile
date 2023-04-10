@@ -98,3 +98,23 @@ print-%:
 	@echo '$*=$($*)'
 
 .PHONY: develop build install lint lints format fix check checks annotate test coverage show-coverage tests show-version patch minor major dist-build dist-check dist publish deep-clean clean help
+
+
+############################################################################################
+#DOCS
+############################################################################################
+TMPREPO=/tmp/docs/bt
+
+docs: 
+	$(MAKE) -C docs/ clean
+	$(MAKE) -C docs/ html
+
+pages: 
+	rm -rf $(TMPREPO)
+	git clone -b gh-pages git@github.com:egeozguroglu/dtw-sofar.git $(TMPREPO)
+	rm -rf $(TMPREPO)/*
+	cp -r docs/_build/html/* $(TMPREPO)
+	cd $(TMPREPO);\
+	git add -A ;\
+	git commit -a -m 'auto-updating docs' ;\
+	git push

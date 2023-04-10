@@ -3,7 +3,7 @@
 [![PyPI](https://img.shields.io/pypi/v/dtw-sofar)](https://pypi.org/project/dtw-sofar/)
 [![License](https://img.shields.io/github/license/egeozguroglu/dtw-sofar.svg)](https://github.com/egeozguroglu/dtw-sofar)
 ![GitHub issues](https://img.shields.io/github/issues/egeozguroglu/dtw-sofar) [![Build Status](https://github.com/egeozguroglu/dtw-sofar/workflows/Build%20Status/badge.svg?branch=main)](https://github.com/egeozguroglu/dtw-sofar/actions?query=workflow%3A%22Build+Status%22) [![codecov](https://codecov.io/gh/egeozguroglu/dtw-sofar/branch/main/graph/badge.svg)](https://codecov.io/gh/egeozguroglu/dtw-sofar)
-
+[![Docs](https://img.shields.io/badge/docs-passing-success)](https://egeozguroglu.github.io/dtw-sofar/)
 
 # Overview
 
@@ -23,23 +23,9 @@ $ pip install numpy
 $ pip install dtw-sofar
 ```
 
-# Quick Start Examples:
-Below is a sample use-case for quick start:
+# Quick Start Example:
+Below is a simple use-case for quick start:
     
-```python
-import importlib
-import numpy as np
-dtwsofar = importlib.import_module('dtw-sofar.dtw_sofar')
-
-video_features = np.load('CLIP_video_embeddings_path')
-text_features = np.load('CLIP_text_embeddings_path')
-
-# iterates over each RGB frame's CLIP embeddings and classifies matching text embeddings on-the-fly:
-final_path, dtw_matrix, onthefly_predictions, onthefly_path = dtwsofar.dtw_onthefly_classification(video_features, text_features)
-```
-This use case demonstrates performing dynamic time warping so-far on image and natural language embeddings from Open AI's CLIP Model, so as to align them. See the overview for relevance. 
-
-This library can also be used for simpler time-series:
 ```python
 # time-series to be aligned with dynamic time warping "so far":
 time_series_a = np.random.rand(100, 1)
