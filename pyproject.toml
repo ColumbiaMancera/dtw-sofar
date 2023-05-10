@@ -40,6 +40,7 @@ develop = [
     "twine",
     "wheel",
     "numpy",
+    "torch",
 ]
 
 [tool.black]
