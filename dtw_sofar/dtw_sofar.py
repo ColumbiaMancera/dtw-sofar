@@ -1,4 +1,5 @@
 import numpy as np
+import torch
 
 
 def dtw(x, y, cost_metric):
@@ -15,8 +16,15 @@ def dtw(x, y, cost_metric):
     :return: The dynamic time warping cost matrix.
     :rtype: np.ndarray
     """
-    n = x.shape[0]  # points in series x
-    m = y.shape[0]  # points in series y
+    x_prime, y_prime = x, y
+
+    if isinstance(x, torch.Tensor):
+        x_prime = x_prime.detach().cpu().numpy()
+    if isinstance(y, torch.Tensor):
+        y_prime = y_prime.detach().cpu().numpy()
+
+    n = x_prime.shape[0]  # points in series x
+    m = y_prime.shape[0]  # points in series y
 
     # cost matrix (n+1, m+1):
     dtw_matrix = np.zeros((n + 1, m + 1))  # ensures dtw_matrix[0,0] == 0
@@ -37,7 +45,7 @@ def dtw(x, y, cost_metric):
             ]
             backptr_idx = np.argmin(temporal_neighbors)
             temporal_penalty = temporal_neighbors[backptr_idx]
-            dtw_matrix[i + 1, j + 1] = cost_metric(x[i], y[j]) + temporal_penalty
+            dtw_matrix[i + 1, j + 1] = cost_metric(x_prime[i], y_prime[j]) + temporal_penalty
             backpointers[i, j] = backptr_idx
 
     # get alignment: trace back from dtw_matrix[n,m] to dtw_matrix[0,0]:
@@ -73,8 +81,15 @@ def get_initial_matrices(frame_features, text_features):
     :return: The dynamic time warping backpointers matrix.
     :rtype: np.ndarray
     """
-    n = frame_features.shape[0]
-    m = text_features.shape[0]
+    frame_ftrs, text_ftrs = frame_features, text_features
+
+    if isinstance(frame_features, torch.Tensor):
+        frame_ftrs = frame_ftrs.detach().cpu().numpy()
+    if isinstance(text_features, torch.Tensor):
+        text_ftrs = text_ftrs.detach().cpu().numpy()
+
+    n = frame_ftrs.shape[0]
+    m = text_ftrs.shape[0]
 
     # cost matrix (n+1, m+1):
     cost_matrix = np.zeros((n + 1, m + 1))  # ensures dtw_matrix[0,0] == 0
@@ -120,14 +135,21 @@ def dtw_onthefly_classification(image_features, text_features):
     :return: onthefly_path: iterative alignment paths.
     :rtype: list[list[tuple[int, int]]]
     """
-    cost_matrix, backpointers = get_initial_matrices(image_features, text_features)
+    image_ftrs, text_ftrs = image_features, text_features
+
+    if isinstance(image_features, torch.Tensor):
+        image_ftrs = image_ftrs.detach().cpu().numpy()
+    if isinstance(text_features, torch.Tensor):
+        text_ftrs = text_ftrs.detach().cpu().numpy()
+
+    cost_matrix, backpointers = get_initial_matrices(image_ftrs, text_ftrs)
 
     onthefly_predictions = list()  # "on the fly" predictions
     onthefly_path = list()
-    for i in range(len(image_features)):  # iterate across all video frames
+    for i in range(len(image_ftrs)):  # iterate across all video frames
         # retrieve alignment path (i elements long) "so far":
         path_sofar, cost_matrix, backpointers, current_predicted_idx = dtw_sofar(
-            image_features[i], text_features, i, cost_matrix, backpointers, dtw_cost
+            image_ftrs[i], text_ftrs, i, cost_matrix, backpointers, dtw_cost
         )
         # print(cost_matrix[i+1])
 
