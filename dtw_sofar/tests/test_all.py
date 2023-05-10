@@ -152,3 +152,21 @@ def test_integ_dtwclassification():
 
         expected_preds = read_processed_data('dtw_sofar/tests/expected_preds.pickle')
         assert expected_preds == onthefly_predictions
+
+
+def test_integ_dtwclassification_with_torch_arrays():
+    for i in range(10):
+        frame_features = torch.rand(10)
+        text_features = torch.rand(5)
+        final_path, cost_matrix, onthefly_predictions, onthefly_path = dtw_onthefly_classification(
+            frame_features, text_features
+        )
+
+        expected_final_path = read_processed_data('dtw_sofar/tests/expected_final_path.pickle')
+        assert final_path == expected_final_path
+
+        expected_onthefly_path = read_processed_data('dtw_sofar/tests/expected_otf_path.pickle')
+        assert onthefly_path == expected_onthefly_path
+
+        expected_preds = read_processed_data('dtw_sofar/tests/expected_preds.pickle')
+        assert expected_preds == onthefly_predictions
