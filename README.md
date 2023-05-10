@@ -16,20 +16,22 @@ For development details and contribution instructions, please refer to the [cont
 
 
 # Installation: 
-First, install Python 3.7 (or later) and numpy, and then install this repo as a Python package. 
+First, install Python 3.7 (or later), torch, and numpy, and then install this repo as a Python package. 
+Additionally, this project currently supports embedding features as np arrays and torch tensors, so feel free to use what is best for your research.  
 
 ```bash
 $ pip install numpy
+$ pip install torch
 $ pip install dtw-sofar
 ```
 
 # Quick Start Example:
-Below is a simple use-case for quick start:
+Below is a simple use-case using torch tensors:
     
 ```python
 # time-series to be aligned with dynamic time warping "so far":
-time_series_a = np.random.rand(100, 1)
-time_series_b = np.random.rand(35,1)
+time_series_a = torch.rand(100, 1)
+time_series_b = torch.rand(35,1)
 
 final_path, dtw_matrix, onthefly_alignment, onthefly_path = dtwsofar.dtw_onthefly_classification(time_series_a, time_series_b)
 ```

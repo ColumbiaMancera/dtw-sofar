@@ -2,6 +2,7 @@ from dtw_sofar import *
 from unittest.mock import patch
 import numpy as np
 import pickle
+import torch
 
 
 def test_dtwcost():
@@ -34,10 +35,35 @@ def test_get_initial_matrices_costmatrix():
     assert np.array_equal(cost_matrix_expected, cost_matrix)
 
 
+def test_get_initial_matrices_costmatrix_with_torch_arrays():
+    frame_features = torch.rand(20)
+    text_features = torch.rand(10)
+    cost_matrix, backpointers = get_initial_matrices(frame_features, text_features)
+
+    n = frame_features.size(dim=0)
+    m = text_features.size(dim=0)
+
+    cost_matrix_expected = np.zeros((n + 1, m + 1))
+    for i in range(1, n + 1):
+        cost_matrix_expected[i, 0] = np.inf
+    for i in range(1, m + 1):
+        cost_matrix_expected[0, i] = np.inf
+    assert np.array_equal(cost_matrix_expected, cost_matrix)
+
+
 @patch('dtw_sofar.dtw_cost', return_value=0.5)
 def test_dtw(dtw):
     frame_features = np.zeros((5, 1))
     text_features = np.zeros((10, 1))
+    alignment_path, dtw_matrix = dtw_sofar.dtw(frame_features, text_features, lambda a, b: np.linalg.norm(a - b))
+    expected = [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (1, 6), (2, 7), (3, 8), (4, 9)]
+    assert alignment_path == expected
+
+
+@patch('dtw_sofar.dtw_cost', return_value=0.5)
+def test_dtw_with_torch_arrays(dtw):
+    frame_features = torch.zeros(5, 1)
+    text_features = torch.zeros(10, 1)
     alignment_path, dtw_matrix = dtw_sofar.dtw(frame_features, text_features, lambda a, b: np.linalg.norm(a - b))
     expected = [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (1, 6), (2, 7), (3, 8), (4, 9)]
     assert alignment_path == expected
@@ -49,6 +75,31 @@ def test_dtw_sofar(dtwdtw_sofar):
     text_features = np.zeros((10, 1))
     n = frame_features.shape[0]
     m = text_features.shape[0]
+    backpointers = np.zeros((n, m))
+
+    cost_matrix = np.zeros((n + 1, m + 1))
+    for i in range(1, n + 1):
+        cost_matrix[i, 0] = np.inf
+    for i in range(1, m + 1):
+        cost_matrix[0, i] = np.inf
+
+    expected_path = [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0)]
+    for i in range(len(frame_features)):
+        path_sofar, cost_matrix, backpointers, current_predicted_idx = dtw_sofar.dtw_sofar(
+            frame_features[i], text_features, i, cost_matrix, backpointers, lambda a, b: np.linalg.norm(a - b)
+        )
+        assert current_predicted_idx == 0
+        assert len(path_sofar) == i + 1
+        assert path_sofar[i] == expected_path[i]
+
+
+@patch('dtw_sofar.dtw_cost', return_value=0)
+def test_dtw_sofar_with_torch_arrays(dtwdtw_sofar):
+    frame_features = torch.zeros(5, 1)
+    text_features = torch.zeros(10, 1)
+
+    n = frame_features.size(dim=0)
+    m = text_features.size(dim=0)
     backpointers = np.zeros((n, m))
 
     cost_matrix = np.zeros((n + 1, m + 1))
